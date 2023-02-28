@@ -5,13 +5,13 @@ namespace s2_services.models
 {
     public class users
     {
-        //[BsonId]
+        [BsonId]
         private ObjectId id;
         [BsonElement]
         private string username;
         [BsonElement]
         private string password;
-        //private string[] scope;
+        private string[] scope;
 
         public users() { }
 
