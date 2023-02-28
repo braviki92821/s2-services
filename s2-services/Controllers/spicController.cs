@@ -8,9 +8,9 @@ namespace s2_services.Controllers
     [ApiController]
     public class spicController : Controller
     {
-        private readonly spicCollection _spicCollection;
+        private readonly spicService _spicCollection;
 
-        public spicController(spicCollection spicCollection)
+        public spicController(spicService spicCollection)
         {
             _spicCollection= spicCollection;
         }

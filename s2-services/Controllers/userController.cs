@@ -19,7 +19,7 @@ namespace s2_services.Controllers
         }
 
         [HttpGet]
-        public List<users> login(users users) {
+        public void login(users users) {
             return connectionAuth.auth.GetCollection<users>("users").FindAsync(new BsonDocument { { "username",users.Username },{ "password",users.Password } }).Result.ToList();
         }
  
