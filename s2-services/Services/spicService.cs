@@ -23,10 +23,6 @@ namespace s2_services.repository
 
         public Spic agregar(Spic spic)
         {
-            if (spic.Nombres==null)
-            {
-
-            }
             spicColl.InsertOne(spic);
             return spic;
         }

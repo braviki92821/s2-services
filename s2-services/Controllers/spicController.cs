@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using s2_services.models;
 using s2_services.repository;
 
 namespace s2_services.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class spicController : Controller
@@ -15,9 +17,11 @@ namespace s2_services.Controllers
             _spicCollection= spicCollection;
         }
 
+        [Authorize]
         [HttpGet]
         public  ActionResult<List<Spic>> GetDatos()
         {
+            
             return  _spicCollection.GetSpicList();
         }
 

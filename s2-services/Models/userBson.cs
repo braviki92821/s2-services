@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace s2_services.models
 {
-    public class users
+    public class userBson
     {
         [BsonId]
         private ObjectId id;
@@ -14,7 +14,7 @@ namespace s2_services.models
         [BsonElement]
         private string[] scope;
 
-        public users() { }
+        public userBson() { }
 
         public string Username { get => username; set => username = value; }
         public string Password { get => password; set => password = value; }

@@ -1,25 +1,96 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Amazon.Runtime;
+using Amazon.Runtime.SharedInterfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using s2_services.models;
+using s2_services.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace s2_services.repository
 {
     public class userService
     {
-        private readonly IMongoCollection<users> usersColl;
+        private readonly IMongoCollection<userBson> usersColl;
+        private readonly IMongoCollection<user> userColl;
+        private readonly IMongoCollection<token> tokenColl;
+        private readonly IMongoCollection<tokenBson> tokensColl;
+        IOptions<Jwt> _configuration;
 
-        public userService(IOptions<MongoConnectionAuth> mongoconnection) { 
+        public userService(IOptions<MongoConnectionAuth> mongoconnection,IOptions<Jwt>configuration) { 
             var mongoClient=new MongoClient(mongoconnection.Value.ConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase(mongoconnection.Value.DataBaseName);
-            usersColl = mongoDatabase.GetCollection<users>(mongoconnection.Value.UsersCollectionName);
+            var mongoDatabaseusers = mongoClient.GetDatabase(mongoconnection.Value.DataBaseName);
+            usersColl = mongoDatabaseusers.GetCollection<userBson>(mongoconnection.Value.UsersCollectionName);
+            userColl= mongoDatabaseusers.GetCollection<user>(mongoconnection.Value.UsersCollectionName);
+            tokenColl = mongoDatabaseusers.GetCollection<token>(mongoconnection.Value.TokensCollectionName);
+
+            _configuration = configuration;
         }
 
-        public async Task<users> GetUsuario(string nombre,string password)
+        public async Task<userBson> GetUsuario(string nombre,string password)
         {
-            var filter = Builders<users>.Filter;
+            var filter = Builders<userBson>.Filter;
             var filterDefinition=filter.And(filter.StringIn("username",nombre),filter.StringIn("password",password));
             return await usersColl.FindAsync(filterDefinition).Result.FirstOrDefaultAsync();
         }
+
+        public user RegistrarUsuario(user users)
+        {
+            userColl.InsertOne(users);
+            return users;
+        }
+
+        public List<userBson> obtenerUsuarios()
+        {
+            return usersColl.FindAsync(new BsonDocument()).Result.ToList();
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+        public JwtSecurityToken token(List<Claim> authClaims)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Value.key));
+            var singIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expire = DateTime.Now.AddSeconds(180);
+            var token = new JwtSecurityToken(_configuration.Value.Issuer,
+                _configuration.Value.Audience,
+                authClaims,
+                expires: expire,
+                signingCredentials: singIn
+               );
+
+            return token;
+        }
+
+        public token InsertartToken(token tokens)
+        {
+            tokenColl.InsertOne(tokens);
+            return tokens;
+        }
+
+        //public async Task<tokenBson> esTokenExpirado()
+        //{
+        //    HttpHeaders keys;
+        //    var token=keys.GetValues("");
+           
+        //    var filter = Builders<tokenBson>.Filter;
+        //    var filterDefinition = filter.And(filter.StringIn("access_token", ), filter.StringIn("expires_in", password));
+        //}
+
+
     }
 }
