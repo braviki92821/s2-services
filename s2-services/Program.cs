@@ -1,6 +1,8 @@
 using Amazon.Util.Internal.PlatformServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver.Core.Operations;
+using s2_services.Models;
 using s2_services.repository;
 using System.Text;
 
@@ -10,7 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.Configure<MongoConnection>(builder.Configuration.GetSection("S2Settings"));
+builder.Services.Configure<MongoConnectionAuth>(builder.Configuration.GetSection("Auth20"));
+builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddSingleton<spicService>();
+builder.Services.AddSingleton<userService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters

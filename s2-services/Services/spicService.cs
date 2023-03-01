@@ -5,13 +5,11 @@ using s2_services.models;
 
 namespace s2_services.repository
 {
-
-
-    public class spicCollection
+    public class spicService
     {
         private readonly IMongoCollection<Spic> spicColl;
 
-        public spicCollection(IOptions<MongoConnection> mongoconnection)
+        public spicService(IOptions<MongoConnection> mongoconnection)
         {
             var mongoClient = new MongoClient(mongoconnection.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(mongoconnection.Value.DataBaseName);
