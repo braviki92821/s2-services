@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using s2_services.models;
 using s2_services.Models;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -29,7 +30,7 @@ namespace s2_services.repository
             usersColl = mongoDatabaseusers.GetCollection<userBson>(mongoconnection.Value.UsersCollectionName);
             userColl= mongoDatabaseusers.GetCollection<user>(mongoconnection.Value.UsersCollectionName);
             tokenColl = mongoDatabaseusers.GetCollection<token>(mongoconnection.Value.TokensCollectionName);
-
+            tokensColl = mongoDatabaseusers.GetCollection<tokenBson>(mongoconnection.Value.TokensCollectionName);
             _configuration = configuration;
         }
 
@@ -76,21 +77,33 @@ namespace s2_services.repository
             return token;
         }
 
-        public token InsertartToken(token tokens)
+        public token InsertarToken(token tokens)
         {
             tokenColl.InsertOne(tokens);
             return tokens;
         }
+        
+        public async Task<bool> esTokenActivo(string token)
+        {
+            bool activo=false;
+            var filter = Builders<tokenBson>.Filter;
+            var filterDefinition = filter.And(filter.StringIn("Access_token", token));
+            var _token= await tokensColl.FindAsync(filterDefinition).Result.FirstOrDefaultAsync();
 
-        //public async Task<tokenBson> esTokenExpirado()
-        //{
-        //    HttpHeaders keys;
-        //    var token=keys.GetValues("");
-           
-        //    var filter = Builders<tokenBson>.Filter;
-        //    var filterDefinition = filter.And(filter.StringIn("access_token", ), filter.StringIn("expires_in", password));
-        //}
-
+            if (_token == null)
+            {
+                activo = false;
+            }
+            else if (token == _token.Access_token && DateTime.Now > _token.Expires_in)
+            {
+                activo = false;
+            }
+            else if (token == _token.Access_token && DateTime.Now < _token.Expires_in)
+            {
+                activo = true;
+            }
+            return activo;
+        }
 
     }
 }
