@@ -2,5 +2,8 @@
 {
     public class ApiRequest
     {
+        public Object body { get; set; } = string.Empty;
+
+
     }
 }

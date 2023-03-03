@@ -7,9 +7,8 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using s2_services.models;
 using s2_services.Models;
-using System.Collections.Generic;
+using s2_services.Models.DataTransfer;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,29 +18,30 @@ namespace s2_services.repository
     public class userService
     {
         private readonly IMongoCollection<userBson> usersColl;
-        private readonly IMongoCollection<user> userColl;
+        private readonly IMongoCollection<userTransfer> userColl;
         private readonly IMongoCollection<token> tokenColl;
         private readonly IMongoCollection<tokenBson> tokensColl;
         IOptions<Jwt> _configuration;
 
-        public userService(IOptions<MongoConnectionAuth> mongoconnection,IOptions<Jwt>configuration) { 
-            var mongoClient=new MongoClient(mongoconnection.Value.ConnectionString);
+        public userService(IOptions<MongoConnectionAuth> mongoconnection, IOptions<Jwt> configuration)
+        {
+            var mongoClient = new MongoClient(mongoconnection.Value.ConnectionString);
             var mongoDatabaseusers = mongoClient.GetDatabase(mongoconnection.Value.DataBaseName);
             usersColl = mongoDatabaseusers.GetCollection<userBson>(mongoconnection.Value.UsersCollectionName);
-            userColl= mongoDatabaseusers.GetCollection<user>(mongoconnection.Value.UsersCollectionName);
+            userColl = mongoDatabaseusers.GetCollection<userTransfer>(mongoconnection.Value.UsersCollectionName);
             tokenColl = mongoDatabaseusers.GetCollection<token>(mongoconnection.Value.TokensCollectionName);
             tokensColl = mongoDatabaseusers.GetCollection<tokenBson>(mongoconnection.Value.TokensCollectionName);
             _configuration = configuration;
         }
 
-        public async Task<userBson> GetUsuario(string nombre,string password)
+        public async Task<userBson> GetUsuario(string nombre, string password)
         {
             var filter = Builders<userBson>.Filter;
-            var filterDefinition=filter.And(filter.StringIn("username",nombre),filter.StringIn("password",password));
+            var filterDefinition = filter.And(filter.StringIn("username", nombre), filter.StringIn("password", password));
             return await usersColl.FindAsync(filterDefinition).Result.FirstOrDefaultAsync();
         }
 
-        public user RegistrarUsuario(user users)
+        public userTransfer RegistrarUsuario(userTransfer users)
         {
             userColl.InsertOne(users);
             return users;
@@ -82,13 +82,13 @@ namespace s2_services.repository
             tokenColl.InsertOne(tokens);
             return tokens;
         }
-        
+
         public async Task<bool> esTokenActivo(string token)
         {
-            bool activo=false;
+            bool activo = false;
             var filter = Builders<tokenBson>.Filter;
             var filterDefinition = filter.And(filter.StringIn("Access_token", token));
-            var _token= await tokensColl.FindAsync(filterDefinition).Result.FirstOrDefaultAsync();
+            var _token = await tokensColl.FindAsync(filterDefinition).Result.FirstOrDefaultAsync();
 
             if (_token == null)
             {

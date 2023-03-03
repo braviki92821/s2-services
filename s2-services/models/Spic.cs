@@ -8,7 +8,7 @@ namespace s2_services.models
         [BsonId]
         private ObjectId id;
 
-        private string fechaCaptura;
+        private DateTime fechaCaptura;
         private string ejercicioFiscal;
         private string rfc;
         private string curp;
@@ -28,7 +28,7 @@ namespace s2_services.models
         public Spic(){ }
 
         public ObjectId Id { get => id; set => id = value; }
-        public string FechaCaptura { get => fechaCaptura; set => fechaCaptura = value; }
+        public DateTime FechaCaptura { get => fechaCaptura; set => fechaCaptura = new DateTime(value.Ticks, DateTimeKind.Utc); }
         public string EjercicioFiscal { get => ejercicioFiscal; set => ejercicioFiscal = value; }
         public string Rfc { get => rfc; set => rfc = value; }
         public string Curp { get => curp; set => curp = value; }
