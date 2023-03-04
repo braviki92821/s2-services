@@ -37,7 +37,7 @@ namespace s2_services.repository
         public async Task<userBson> GetUsuario(string nombre, string password)
         {
             var filter = Builders<userBson>.Filter;
-            var filterDefinition = filter.And(filter.StringIn("username", nombre), filter.StringIn("password", password));
+            var filterDefinition = filter.And(filter.StringIn("Username", nombre), filter.StringIn("Password", password));
             return await usersColl.FindAsync(filterDefinition).Result.FirstOrDefaultAsync();
         }
 
