@@ -83,6 +83,13 @@ namespace s2_services.repository
             return tokens;
         }
 
+        public void BorrarToken(string token,string refresh_token)
+        {
+           tokenColl.DeleteOne("{Access_token:"+token+",Refresh_token:"+refresh_token+"}");
+        }
+
+        
+
         public async Task<bool> esTokenActivo(string token)
         {
             bool activo = false;
@@ -104,6 +111,8 @@ namespace s2_services.repository
             }
             return activo;
         }
+
+
 
     }
 }

@@ -34,7 +34,7 @@ namespace s2_services.Controllers
                 }
                 else
                 {
-                    spicList= _spicCollection.GetSpicList();
+                    spicList = _spicCollection.GetSpicList();
                 }
                 return Ok(new ApiResponse
                 {
@@ -86,6 +86,42 @@ namespace s2_services.Controllers
                          Message = ex.Message,
                          IsSuccess = false
                      });
+            }
+        }
+
+
+        [HttpGet]
+        [Route("ObtenerServidor")]
+        public async Task<ActionResult<ApiResponse>> obtenerPorFiltro([FromHeader] string Authorization, [FromBody] spicFilter filter)
+        {
+            try
+            {
+                var acceso = await _userService.esTokenActivo(Authorization);
+                Object servidor;
+                if (!acceso)
+                {
+                    throw new Exception("token invalido o expirado");
+                }
+                else
+                {
+                    servidor = _spicCollection.GetSpCbynames(filter.Nombres, filter.PrimerApellido, filter.SegundoApellido, filter.InstitucionDependencia);
+                }
+
+                return Ok(new ApiResponse
+                {
+                    Message = "Process success",
+                    Content = servidor
+                });
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = e.Message,
+                    IsSuccess = false
+                });
             }
         }
 

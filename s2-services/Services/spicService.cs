@@ -27,6 +27,14 @@ namespace s2_services.repository
             return spic;
         }
 
-            
+        public List<Spic> GetSpCbynames(string nombres,string pApellido,string sApellido,string dependencia)
+        {
+            string search = "{Nombres:/"+nombres+"/i,PrimerApellido:/"+pApellido+ "/i,SegundoApellido:/"+sApellido+ "/i,'InstitucionDependencia.Nombre':/"+dependencia+"/i}";
+            var filter = Builders<Spic>.Filter;
+            var filterDefinition = filter.Or(search);
+            return spicColl.FindAsync(filterDefinition).Result.ToList();
+        }
+
+
     }
 }
