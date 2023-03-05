@@ -21,12 +21,14 @@ namespace s2_services.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<ApiResponse>> GetDatos([FromHeader] string Authorization)
         {
             try
             {
-                var acceso = await _userService.esTokenActivo(Authorization);
+                string token = Authorization.Remove(0,7);
+                var acceso = await _userService.esTokenActivo(token);
                 Object spicList;
                 if (!acceso)
                 {
@@ -54,13 +56,14 @@ namespace s2_services.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         [Route("nuevoServidor")]
         public async Task<ActionResult<ApiResponse>> Insertar([FromHeader] string Authorization, [FromBody] Spic spic)
         {
             try
             {
-                var acceso = await _userService.esTokenActivo(Authorization);
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0,7));
                 Object newSpic;
                 if (!acceso)
                 {
@@ -90,13 +93,14 @@ namespace s2_services.Controllers
         }
 
 
+        [Authorize]
         [HttpGet]
         [Route("ObtenerServidor")]
         public async Task<ActionResult<ApiResponse>> obtenerPorFiltro([FromHeader] string Authorization, [FromBody] spicFilter filter)
         {
             try
             {
-                var acceso = await _userService.esTokenActivo(Authorization);
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
                 Object servidor;
                 if (!acceso)
                 {

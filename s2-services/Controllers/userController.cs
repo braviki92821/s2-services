@@ -84,14 +84,15 @@ namespace s2_services.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("registrar")]
-        public async Task<ActionResult<ApiResponse>> Registrer([FromHeader] string Authorization,[FromBody]userTransfer nuevoUsuario)
+        public async Task<ActionResult<ApiResponse>> Registrer([FromHeader] string Authorization, [FromBody] userTransfer nuevoUsuario)
         {
             try
-            {  
-
-                var acceso = await _userService.esTokenActivo(Authorization);
+            {
+                string token = Authorization.Remove(0, 7);
+                var acceso = await _userService.esTokenActivo(token);
                 Object userN;
                 if (!acceso)
                 {
@@ -127,7 +128,7 @@ namespace s2_services.Controllers
         {
             try
             {
-                string token = Authorization.Remove(0,7);
+                string token = Authorization.Remove(0, 7);
                 var acceso = await _userService.esTokenActivo(token);
                 Object usuarios;
                 if (!acceso)
@@ -155,13 +156,14 @@ namespace s2_services.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("refreshToken")]
-        public async Task<ActionResult<ApiResponse>> newToken([FromHeader] string Authorization, [FromBody] tokenForm form)
+        public async Task<ActionResult<ApiResponse>> newToken([FromBody] tokenForm form)
         {
             try
             {
-                bool acceso =await _userService.esTokenActivo(form.Token);
+                string tokenAcceso = form.Token.Remove(0, 7);
+                bool acceso = await _userService.esTokenActivo(tokenAcceso);
                 var tokenBody = new token();
                 if (acceso)
                 {
@@ -187,22 +189,24 @@ namespace s2_services.Controllers
                     tokenBody.Refresh_token_expires_in = expire;
                     tokenBody.Username = form.Username;
                     tokenBody.Scope = form.Scope;
-                    _userService.InsertarToken(tokenBody);
-                    _userService.BorrarToken(form.Token,form.Refresh_token);
+                     _userService.InsertarToken(tokenBody);
+                     _userService.BorrarToken(tokenAcceso, form.Refresh_token);
+
                     return Ok(new ApiResponse
                     {
                         Message = "Process success.",
                         Content = tokenBody
-                    }); 
+                    });
                 }
 
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(new ApiResponse
                 {
-                    StatusCode= HttpStatusCode.BadRequest,
-                    Message= e.Message,
-                    IsSuccess=false
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = e.Message,
+                    IsSuccess = false
                 });
             }
 

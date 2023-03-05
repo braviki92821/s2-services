@@ -1,5 +1,6 @@
 ﻿using Amazon.Runtime;
 using Amazon.Runtime.SharedInterfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -85,10 +86,11 @@ namespace s2_services.repository
 
         public void BorrarToken(string token,string refresh_token)
         {
-           tokenColl.DeleteOne("{Access_token:"+token+",Refresh_token:"+refresh_token+"}");
+            var filter = Builders<token>.Filter;
+            var filterDefinition = filter.And(filter.StringIn("Access_token", token), filter.StringIn("Refresh_token", refresh_token));
+            var t = tokenColl.DeleteOne(filterDefinition);
         }
 
-        
 
         public async Task<bool> esTokenActivo(string token)
         {
