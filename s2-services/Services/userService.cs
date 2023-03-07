@@ -48,7 +48,7 @@ namespace s2_services.repository
             return users;
         }
 
-        public List<userBson> obtenerUsuarios()
+        public async Task<List<userBson>> obtenerUsuarios()
         {
             return usersColl.FindAsync(new BsonDocument()).Result.ToList();
         }

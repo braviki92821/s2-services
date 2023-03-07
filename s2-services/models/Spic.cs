@@ -6,8 +6,8 @@ namespace s2_services.models
     public class Spic
     {
         [BsonId]
-        private ObjectId id;
-
+        [BsonRepresentation(BsonType.ObjectId)]
+        private string id;
         private DateTime fechaCaptura;
         private string ejercicioFiscal;
         private string rfc;
@@ -27,7 +27,7 @@ namespace s2_services.models
 
         public Spic(){ }
 
-        public ObjectId Id { get => id; set => id = value; }
+        public string Id { get => id; set => id = value; }
         public DateTime FechaCaptura { get => fechaCaptura; set => fechaCaptura = new DateTime(value.Ticks, DateTimeKind.Utc); }
         public string EjercicioFiscal { get => ejercicioFiscal; set => ejercicioFiscal = value; }
         public string Rfc { get => rfc; set => rfc = value; }

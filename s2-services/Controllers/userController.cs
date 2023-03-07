@@ -91,8 +91,7 @@ namespace s2_services.Controllers
         {
             try
             {
-                string token = Authorization.Remove(0, 7);
-                var acceso = await _userService.esTokenActivo(token);
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
                 Object userN;
                 if (!acceso)
                 {
@@ -128,8 +127,7 @@ namespace s2_services.Controllers
         {
             try
             {
-                string token = Authorization.Remove(0, 7);
-                var acceso = await _userService.esTokenActivo(token);
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
                 Object usuarios;
                 if (!acceso)
                 {
@@ -162,8 +160,7 @@ namespace s2_services.Controllers
         {
             try
             {
-                string tokenAcceso = form.Token.Remove(0, 7);
-                bool acceso = await _userService.esTokenActivo(tokenAcceso);
+                bool acceso = await _userService.esTokenActivo(form.Token.Remove(0, 7));
                 var tokenBody = new token();
                 if (acceso)
                 {
@@ -190,7 +187,7 @@ namespace s2_services.Controllers
                     tokenBody.Username = form.Username;
                     tokenBody.Scope = form.Scope;
                      _userService.InsertarToken(tokenBody);
-                     _userService.BorrarToken(tokenAcceso, form.Refresh_token);
+                     _userService.BorrarToken(form.Token.Remove(0, 7), form.Refresh_token);
 
                     return Ok(new ApiResponse
                     {
@@ -198,7 +195,6 @@ namespace s2_services.Controllers
                         Content = tokenBody
                     });
                 }
-
             }
             catch (Exception e)
             {
@@ -211,5 +207,7 @@ namespace s2_services.Controllers
             }
 
         }
+
+        
     }
 }

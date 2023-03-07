@@ -27,8 +27,7 @@ namespace s2_services.Controllers
         {
             try
             {
-                string token = Authorization.Remove(0,7);
-                var acceso = await _userService.esTokenActivo(token);
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0,7));
                 Object spicList;
                 if (!acceso)
                 {
@@ -92,9 +91,8 @@ namespace s2_services.Controllers
             }
         }
 
-
         [Authorize]
-        [HttpGet]
+        [HttpPost]
         [Route("ObtenerServidor")]
         public async Task<ActionResult<ApiResponse>> obtenerPorFiltro([FromHeader] string Authorization, [FromBody] spicFilter filter)
         {
@@ -116,7 +114,6 @@ namespace s2_services.Controllers
                     Message = "Process success",
                     Content = servidor
                 });
-
             }
             catch (Exception e)
             {
@@ -129,5 +126,38 @@ namespace s2_services.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost]
+        [Route("cargarDatos")]
+        public async Task<ActionResult<ApiResponse>> insertarRegistros([FromHeader] string Authorization, [FromBody] List<Spic> spics)
+        {
+            try
+            {
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
+                if (!acceso)
+                {
+                    throw new Exception("token invalido o expirado");
+                }
+                else
+                {
+                    await _spicCollection.agregarVarios(spics);
+                    return Ok(new ApiResponse
+                    {
+                        Message = "Process success",
+                        Content = spics
+                    });
+                }
+            }catch(Exception e)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = e.Message,
+                    IsSuccess = false
+                });
+            }
+
+        }
+       
     }
 }

@@ -16,7 +16,7 @@ namespace s2_services.repository
             spicColl = mongoDatabase.GetCollection<Spic>(mongoconnection.Value.S2CollectionName);
         }
 
-        public List<Spic> GetSpicList()
+        public async Task<List<Spic>> GetSpicList()
         {
             return spicColl.FindAsync(new BsonDocument()).Result.ToList();
         }
@@ -35,6 +35,9 @@ namespace s2_services.repository
             return spicColl.FindAsync(filterDefinition).Result.ToList();
         }
 
-
+        public async Task agregarVarios(List<Spic> spics)
+        {
+             await spicColl.InsertManyAsync(spics);
+        }
     }
 }
