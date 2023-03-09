@@ -27,16 +27,15 @@ namespace s2_services.Controllers
         {
             try
             {
-                var acceso = await _userService.esTokenActivo(Authorization.Remove(0,7));
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
                 Object spicList;
                 if (!acceso)
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                else
-                {
-                    spicList = _spicCollection.GetSpicList();
-                }
+
+                spicList = _spicCollection.GetSpicList();
+
                 return Ok(new ApiResponse
                 {
                     Message = "Process success.",
@@ -62,16 +61,14 @@ namespace s2_services.Controllers
         {
             try
             {
-                var acceso = await _userService.esTokenActivo(Authorization.Remove(0,7));
+                var acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
                 Object newSpic;
                 if (!acceso)
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                else
-                {
+               
                     newSpic = _spicCollection.agregar(spic);
-                }
 
                 return Ok(new ApiResponse
                 {
@@ -104,10 +101,8 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                else
-                {
-                    servidor = _spicCollection.GetSpCbynames(filter.Nombres, filter.PrimerApellido, filter.SegundoApellido, filter.InstitucionDependencia);
-                }
+                
+                    servidor = _spicCollection.GetSpCbynames(filter);
 
                 return Ok(new ApiResponse
                 {
@@ -138,16 +133,16 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                else
-                {
+              
                     await _spicCollection.agregarVarios(spics);
                     return Ok(new ApiResponse
                     {
                         Message = "Process success",
                         Content = spics
                     });
-                }
-            }catch(Exception e)
+                
+            }
+            catch (Exception e)
             {
                 return BadRequest(new ApiResponse
                 {
@@ -158,6 +153,40 @@ namespace s2_services.Controllers
             }
 
         }
-       
+
+        [Authorize]
+        [HttpPut]
+        [Route("actualizarServidor")]
+        public async Task<ActionResult<ApiResponse>> actualizarServidor([FromHeader] string Authorization, [FromBody] Spic spic)
+        {
+            try
+            {
+                bool acceso = await _userService.esTokenActivo(Authorization.Remove(0, 7));
+                if (!acceso)
+                {
+                    throw new Exception("token invalido o expirado");
+                }
+              
+                    await _spicCollection.actualizarSp(spic);
+                    return Ok(new ApiResponse
+                    {
+                        Message = "Process success",
+                        Content = spic
+                    });
+                
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = e.Message,
+                    IsSuccess = false
+                });
+            }
+        }
+
+
     }
 }

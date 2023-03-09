@@ -97,10 +97,9 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                else
-                {
+               
                     userN = _userService.RegistrarUsuario(nuevoUsuario);
-                }
+                
                 return Ok(new ApiResponse
                 {
                     Message = "Process success.",
@@ -133,10 +132,9 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                else
-                {
+               
                     usuarios = _userService.obtenerUsuarios();
-                }
+                
                 return Ok(new ApiResponse
                 {
                     Message = "Process success.",
@@ -166,8 +164,7 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("El token continua activo");
                 }
-                else
-                {
+                
                     var claims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub,form.Username),
@@ -194,7 +191,7 @@ namespace s2_services.Controllers
                         Message = "Process success.",
                         Content = tokenBody
                     });
-                }
+                
             }
             catch (Exception e)
             {
@@ -208,6 +205,32 @@ namespace s2_services.Controllers
 
         }
 
-        
+
+        [Authorize]
+        [HttpPost]
+        [Route("logout")]
+        public async Task<ActionResult<ApiResponse>> logout([FromHeader] string Authorization, [FromHeader] string refresh_token)
+        {
+            try
+            {
+                _userService.BorrarToken(Authorization.Remove(0, 7), refresh_token);
+                return Ok(new ApiResponse
+                {
+                    Message="Process success",
+                    Content=""
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = e.Message,
+                    IsSuccess = false
+                });
+            }
+        }
+
+
     }
 }

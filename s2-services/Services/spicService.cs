@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using s2_services.models;
+using s2_services.Models;
 
 namespace s2_services.repository
 {
@@ -27,9 +28,9 @@ namespace s2_services.repository
             return spic;
         }
 
-        public List<Spic> GetSpCbynames(string nombres,string pApellido,string sApellido,string dependencia)
+        public List<Spic> GetSpCbynames(spicFilter spicFilter)
         {
-            string search = "{Nombres:/"+nombres+"/i,PrimerApellido:/"+pApellido+ "/i,SegundoApellido:/"+sApellido+ "/i,'InstitucionDependencia.Nombre':/"+dependencia+"/i}";
+            string search = "{Nombres:/"+spicFilter.Nombres+"/i,PrimerApellido:/"+spicFilter.PrimerApellido+ "/i,SegundoApellido:/"+spicFilter.SegundoApellido+ "/i,'InstitucionDependencia.Nombre':/"+spicFilter.InstitucionDependencia+ "/i,TipoProcedimiento:{$elemMatch:{Valor:/"+spicFilter.Procedimiento+"/i}}}";
             var filter = Builders<Spic>.Filter;
             var filterDefinition = filter.Or(search);
             return spicColl.FindAsync(filterDefinition).Result.ToList();
@@ -38,6 +39,12 @@ namespace s2_services.repository
         public async Task agregarVarios(List<Spic> spics)
         {
              await spicColl.InsertManyAsync(spics);
+        }
+
+        public async Task actualizarSp(Spic spic)
+        {
+            var filter = Builders<Spic>.Filter.Eq(s=>s.Id,spic.Id);
+            await spicColl.ReplaceOneAsync(filter,spic);
         }
     }
 }
