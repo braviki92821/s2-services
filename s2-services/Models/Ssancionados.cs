@@ -8,34 +8,22 @@ namespace s2_services.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        private string id;
-        private institucionDependencia institucionDependencia;
-        private servidorPublicoSancionado servidorPublicoSancionado;
-        private tipoFalta tipoFalta;
-        private resolucion resolucion;
-        private multa multa;
-        private inhabilitacion inhabilitacion;
-        private DateTime fechaCaptura;
-        private string expediente;
-        private string autoridadSancionadora;
-        private List<tipoSancion> tipoSancion;
-        private string causaMotivoHechos;
-        private string observaciones;
-        private List<documentos> documentos;
+        public string id { get; set; }
+        public institucionDependencia institucionDependencia { get; set; }
+        public servidorPublicoSancionado servidorPublicoSancionado { get; set; }
+        public tipoFalta tipoFalta { get; set; }
+        public resolucion resolucion { get; set; }
+        public multa multa { get; set; }
+        public inhabilitacion inhabilitacion { get; set; }
+        private DateTime FechaCaptura;
+        public string expediente { get; set; }
+        public string autoridadSancionadora { get; set; }
+        public List<tipoSancion> tipoSancion { get; set; }
+        public string causaMotivoHechos { get; set; }
+        public string observaciones { get; set; }
+        public List<documentos> documentos { get; set; }
 
-        public string Id { get => id; set => id = value; }
-        public institucionDependencia InstitucionDependencia { get => institucionDependencia; set => institucionDependencia = value; }
-        public servidorPublicoSancionado ServidorPublicoSancionado { get => servidorPublicoSancionado; set => servidorPublicoSancionado = value; }
-        public tipoFalta TipoFalta { get => tipoFalta; set => tipoFalta = value; }
-        public resolucion Resolucion { get => resolucion; set => resolucion = value; }
-        public multa Multa { get => multa; set => multa = value; }
-        public inhabilitacion Inhabilitacion { get => inhabilitacion; set => inhabilitacion = value; }
-        public DateTime FechaCaptura { get => fechaCaptura; set => fechaCaptura = value; }
-        public string Expediente { get => expediente; set => expediente = value; }
-        public string AutoridadSancionadora { get => autoridadSancionadora; set => autoridadSancionadora = value; }
-        public List<tipoSancion> TipoSancion { get => tipoSancion; set => tipoSancion = value; }
-        public string CausaMotivoHechos { get => causaMotivoHechos; set => causaMotivoHechos = value; }
-        public string Observaciones { get => observaciones; set => observaciones = value; }
-        public List<documentos> Documentos { get => documentos; set => documentos = value; }
+        public DateTime fechaCaptura { get => FechaCaptura; set => FechaCaptura = new DateTime(value.Ticks, DateTimeKind.Utc); }
+
     }
 }

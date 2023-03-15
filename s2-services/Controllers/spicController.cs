@@ -67,9 +67,10 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-               
+                else
+                {
                     newSpic = _spicCollection.agregar(spic);
-
+                }
                 return Ok(new ApiResponse
                 {
                     Message = "Process success.",
@@ -101,9 +102,10 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-                
+                else
+                {
                     servidor = _spicCollection.GetSpCbynames(filter);
-
+                }
                 return Ok(new ApiResponse
                 {
                     Message = "Process success",
@@ -133,8 +135,10 @@ namespace s2_services.Controllers
                 {
                     throw new Exception("token invalido o expirado");
                 }
-              
+                else
+                {
                     await _spicCollection.agregarVarios(spics);
+                }
                     return Ok(new ApiResponse
                     {
                         Message = "Process success",

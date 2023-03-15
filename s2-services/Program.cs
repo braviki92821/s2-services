@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver.Core.Operations;
 using s2_services.Models;
 using s2_services.repository;
+using s2_services.Services;
 using s2_services.Services.conexiones;
 using System.Text;
 
@@ -14,9 +15,11 @@ TimeSpan ClockSkew;
 
 builder.Services.AddControllers();
 builder.Services.Configure<S2Connection>(builder.Configuration.GetSection("S2Settings"));
+builder.Services.Configure<S3SConnection>(builder.Configuration.GetSection("S3SSettings"));
 builder.Services.Configure<AuthConnection>(builder.Configuration.GetSection("Auth20"));
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddSingleton<spicService>();
+builder.Services.AddSingleton<ssancionadosService>();
 builder.Services.AddSingleton<userService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

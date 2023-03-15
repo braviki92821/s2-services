@@ -29,7 +29,7 @@ namespace s2_services.Controllers
         {
             try
             {
-                var user = await _userService.GetUsuario(userl.Username, userl.Password);
+                var user = await _userService.GetUsuario(userl.username, userl.password);
                 var tokenBody = new token();
                 if (user == null)
                 {

@@ -9,11 +9,9 @@ namespace s2_services.models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string id { get; set; }
-        [Required]
-        public DateTime fechaCaptura { get=> fechaCaptura; set=>new DateTime(value.Ticks, DateTimeKind.Utc); }
+        private DateTime FechaCaptura;
         [Required]
         public string ejercicioFiscal { get; set; }
-        [Required]
         public string rfc { get ; set; }
         public string curp { get; set; }
         [Required]
@@ -38,5 +36,6 @@ namespace s2_services.models
 
         public Spic(){ }
 
+        public DateTime fechaCaptura { get => FechaCaptura; set => FechaCaptura = new DateTime(value.Ticks, DateTimeKind.Utc); }
     }
 }

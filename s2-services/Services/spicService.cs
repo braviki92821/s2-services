@@ -31,7 +31,7 @@ namespace s2_services.repository
 
         public List<Spic> GetSpCbynames(spicFilter spicFilter)
         {
-            string search = "{nombres:/"+spicFilter.Nombres+"/i,primerApellido:/"+spicFilter.PrimerApellido+ "/i,segundoApellido:/"+spicFilter.SegundoApellido+ "/i,'institucionDependencia.Nombre':/" + spicFilter.InstitucionDependencia+ "/i,tipoProcedimiento:{$elemMatch:{Valor:/"+spicFilter.Procedimiento+"/i}}}";
+            string search = "{nombres:/"+spicFilter.nombres+"/i,primerApellido:/"+spicFilter.primerApellido+ "/i,segundoApellido:/"+spicFilter.segundoApellido+ "/i,'institucionDependencia.nombre':/" + spicFilter.institucionDependencia + "/i,tipoProcedimiento:{$elemMatch:{valor:/"+spicFilter.procedimiento+"/i}}}";
             var filter = Builders<Spic>.Filter;
             var filterDefinition = filter.Or(search);
             return spicColl.FindAsync(filterDefinition).Result.ToList();

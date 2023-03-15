@@ -90,7 +90,6 @@ namespace s2_services.repository
             var filter = Builders<token>.Filter;
             var filterDefinition = filter.And(filter.StringIn("Access_token", token), filter.StringIn("Refresh_token", refresh_token));
             tokenColl.DeleteOne(filterDefinition);
-
         }
 
         public async Task<bool> esTokenActivo(string token)
