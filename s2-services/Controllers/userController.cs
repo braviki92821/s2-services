@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using s2_services.Data;
 using s2_services.Models;
 using s2_services.Models.DataTransfer;
+using s2_services.Models.filtro;
 using s2_services.repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
-using System.Text;
 
 namespace s2_services.Controllers
 {
@@ -53,7 +49,7 @@ namespace s2_services.Controllers
                     new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 };
 
-                var expire = DateTime.Now.AddSeconds(180);
+                var expire = DateTime.Now.AddSeconds(3600);
                 var token = _userService.token(claims);
                 var refreshToken = _userService.GenerateRefreshToken();
 
@@ -88,6 +84,7 @@ namespace s2_services.Controllers
         [HttpPost]
         [Route("registrar")]
         public async Task<ActionResult<ApiResponse>> Registrer([FromHeader] string Authorization, [FromBody] userTransfer nuevoUsuario)
+
         {
             try
             {
@@ -230,7 +227,6 @@ namespace s2_services.Controllers
                 });
             }
         }
-
 
     }
 }

@@ -6,14 +6,11 @@ namespace s2_services.models
 {
     public class ramo
     {
-        private int clave;
-        private string valor;
+        public int clave { get; set; }
+        public string valor { get; set; }
  
 
         public ramo() { }
-
-        public int Clave { get => clave; set => clave = value; }
-        public string Valor { get => valor; set => valor = value; }
 
     }
 }

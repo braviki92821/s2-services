@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver.Core.Operations;
 using s2_services.Models;
 using s2_services.repository;
+using s2_services.Services.conexiones;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +13,8 @@ TimeSpan ClockSkew;
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.Configure<MongoConnection>(builder.Configuration.GetSection("S2Settings"));
-builder.Services.Configure<MongoConnectionAuth>(builder.Configuration.GetSection("Auth20"));
+builder.Services.Configure<S2Connection>(builder.Configuration.GetSection("S2Settings"));
+builder.Services.Configure<AuthConnection>(builder.Configuration.GetSection("Auth20"));
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddSingleton<spicService>();
 builder.Services.AddSingleton<userService>();

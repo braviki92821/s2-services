@@ -2,20 +2,14 @@
 {
     public class superiorInmediato
     {
-        private string nombres;
-        private string primerApellido;
-        private string segundoApellido;
-        private string curp;
-        private string rfc;
-        private superiorInmediatoPuesto puesto;
+        public string nombres { get; set; }
+        public string primerApellido { get; set; }
+        public string segundoApellido { get; set; }
+        public string curp { get; set; }
+        public string rfc { get; set; }
+        public superiorInmediatoPuesto puesto { get; set; }
 
         public superiorInmediato() { }
 
-        public string Nombres { get => nombres; set => nombres = value; }
-        public string PrimerApellido { get => primerApellido; set => primerApellido = value; }
-        public string SegundoApellido { get => segundoApellido; set => segundoApellido = value; }
-        public string Curp { get => curp; set => curp = value; }
-        public string Rfc { get => rfc; set => rfc = value; }
-        public superiorInmediatoPuesto Puesto { get => puesto; set => puesto = value; }
     }
 }

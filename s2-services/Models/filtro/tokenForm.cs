@@ -1,4 +1,4 @@
-﻿namespace s2_services.Models
+﻿namespace s2_services.Models.filtro
 {
     public class tokenForm
     {

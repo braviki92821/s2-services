@@ -1,9 +1,9 @@
 ﻿using MongoDB.Driver;
 using s2_services.models;
 
-namespace s2_services.repository
+namespace s2_services.Services.conexiones
 {
-    public class MongoConnectionAuth
+    public class AuthConnection
     {
         public string ConnectionString { get; set; } = null!;
         public string DataBaseName { get; set; } = null!;

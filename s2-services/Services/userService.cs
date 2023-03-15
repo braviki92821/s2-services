@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using s2_services.models;
 using s2_services.Models;
 using s2_services.Models.DataTransfer;
+using s2_services.Services.conexiones;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -24,7 +25,7 @@ namespace s2_services.repository
         private readonly IMongoCollection<tokenBson> tokensColl;
         IOptions<Jwt> _configuration;
 
-        public userService(IOptions<MongoConnectionAuth> mongoconnection, IOptions<Jwt> configuration)
+        public userService(IOptions<AuthConnection> mongoconnection, IOptions<Jwt> configuration)
         {
             var mongoClient = new MongoClient(mongoconnection.Value.ConnectionString);
             var mongoDatabaseusers = mongoClient.GetDatabase(mongoconnection.Value.DataBaseName);
@@ -67,7 +68,7 @@ namespace s2_services.repository
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Value.key));
             var singIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expire = DateTime.Now.AddSeconds(180);
+            var expire = DateTime.Now.AddSeconds(3600);
             var token = new JwtSecurityToken(_configuration.Value.Issuer,
                 _configuration.Value.Audience,
                 authClaims,
@@ -89,6 +90,7 @@ namespace s2_services.repository
             var filter = Builders<token>.Filter;
             var filterDefinition = filter.And(filter.StringIn("Access_token", token), filter.StringIn("Refresh_token", refresh_token));
             tokenColl.DeleteOne(filterDefinition);
+
         }
 
         public async Task<bool> esTokenActivo(string token)
@@ -113,9 +115,5 @@ namespace s2_services.repository
             return activo;
         }
 
-        public async Task actualizarUsuario()
-        {
-
-        }
     }
 }

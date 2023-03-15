@@ -2,12 +2,10 @@
 {
     public class nivelResponsabilidad
     {
-        private string clave;
-        private string valor;
+        public string clave { get ; set; }
+        public string valor { get; set; }
 
         public nivelResponsabilidad() { }
 
-        public string Clave { get => clave; set => clave = value; }
-        public string Valor { get => valor; set => valor = value; }
     }
 }

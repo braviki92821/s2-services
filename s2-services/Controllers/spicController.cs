@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using s2_services.Data;
 using s2_services.models;
-using s2_services.Models;
+using s2_services.Models.filtro;
 using s2_services.repository;
 using System.Net;
 

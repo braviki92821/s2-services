@@ -1,12 +1,8 @@
-﻿namespace s2_services.models
+﻿namespace s2_services.Models
 {
-    public class Genero
+    public class moneda
     {
-
         public string clave { get; set; }
-
         public string valor { get; set; }
-
-        public Genero() { }
     }
 }
