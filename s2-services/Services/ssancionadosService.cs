@@ -37,9 +37,9 @@ namespace s2_services.Services
             return ssancionadosColl.FindAsync(filterDefinition).Result.ToList();
         }
 
-        public async Task agregarVarios(List<Ssancionados> spics)
+        public async Task agregarVarios(List<Ssancionados> ssancionados)
         {
-            await ssancionadosColl.InsertManyAsync(spics);
+            await ssancionadosColl.InsertManyAsync(ssancionados);
         }
 
         public async Task actualizarSpS(Ssancionados ssancionados)
