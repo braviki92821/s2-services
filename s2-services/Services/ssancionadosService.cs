@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using s2_services.models;
 using s2_services.Models;
+using s2_services.Models.filtro;
 using s2_services.Services.conexiones;
 
 namespace s2_services.Services
@@ -27,5 +28,25 @@ namespace s2_services.Services
             ssancionadosColl.InsertOne(ssancionados);
             return ssancionados;
         }
+
+        public List<Ssancionados> GetSsancionadosbynames(ssancionadosFilter ssancionadosFilter)
+        {
+            string search = "{'institucionDependencia.nombre':/" + ssancionadosFilter.institucionDependencia +"/i,'servidorPublicoSancionado.nombres':/" + ssancionadosFilter.nombres+ "/i,'servidorPublicoSancionado.primerApellido':/" + ssancionadosFilter.primerApellido+ "/i,'servidorPublicoSancionado.segundoApellido':/" + ssancionadosFilter.segundoApellido+ "/i,tipoSancion:{$elemMatch:{valor:/" + ssancionadosFilter.tipoSancion+"/i}}}";
+            var filter = Builders<Ssancionados>.Filter;
+            var filterDefinition = filter.Or(search);
+            return ssancionadosColl.FindAsync(filterDefinition).Result.ToList();
+        }
+
+        public async Task agregarVarios(List<Ssancionados> spics)
+        {
+            await ssancionadosColl.InsertManyAsync(spics);
+        }
+
+        public async Task actualizarSpS(Ssancionados ssancionados)
+        {
+            var filter = Builders<Ssancionados>.Filter.Eq(s => s.id, ssancionados.id);
+            await ssancionadosColl.ReplaceOneAsync(filter, ssancionados);
+        }
+
     }
 }

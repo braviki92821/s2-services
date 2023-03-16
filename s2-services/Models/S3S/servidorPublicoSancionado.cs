@@ -1,6 +1,6 @@
-﻿using s2_services.models;
+﻿using s2_services.Models.S2;
 
-namespace s2_services.Models
+namespace s2_services.Models.S3S
 {
     public class servidorPublicoSancionado
     {

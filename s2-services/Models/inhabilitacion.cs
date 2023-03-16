@@ -5,6 +5,5 @@
         public string plazo { get; set; }
         public string fechaInicial { get; set; }
         public string fechaFinal { get; set; }
-
     }
 }

@@ -16,10 +16,12 @@ TimeSpan ClockSkew;
 builder.Services.AddControllers();
 builder.Services.Configure<S2Connection>(builder.Configuration.GetSection("S2Settings"));
 builder.Services.Configure<S3SConnection>(builder.Configuration.GetSection("S3SSettings"));
+builder.Services.Configure<S3PConnection>(builder.Configuration.GetSection("S3PSettings"));
 builder.Services.Configure<AuthConnection>(builder.Configuration.GetSection("Auth20"));
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddSingleton<spicService>();
 builder.Services.AddSingleton<ssancionadosService>();
+builder.Services.AddSingleton<psancionadosService>();
 builder.Services.AddSingleton<userService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

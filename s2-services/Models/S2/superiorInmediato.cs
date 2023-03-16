@@ -1,4 +1,4 @@
-﻿namespace s2_services.models
+﻿namespace s2_services.Models.S2
 {
     public class superiorInmediato
     {

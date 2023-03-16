@@ -1,4 +1,6 @@
-﻿namespace s2_services.Models
+﻿using System.Runtime.InteropServices;
+
+namespace s2_services.Models
 {
     public class tipoSancion
     {

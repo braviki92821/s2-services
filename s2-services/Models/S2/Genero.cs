@@ -1,11 +1,12 @@
-﻿namespace s2_services.models
+﻿namespace s2_services.Models.S2
 {
-    public class tipoArea
+    public class Genero
     {
 
         public string clave { get; set; }
+
         public string valor { get; set; }
 
-        public tipoArea() { }
+        public Genero() { }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using s2_services.models;
+using s2_services.Models.S3S;
 
 namespace s2_services.Models
 {

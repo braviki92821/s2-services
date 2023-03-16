@@ -3,6 +3,6 @@
     public class multa
     {
         public moneda moneda { get; set; }
-        public string monto { get; set; }
+        public int monto { get; set; }
     }
 }
