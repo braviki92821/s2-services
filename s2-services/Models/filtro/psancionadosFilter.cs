@@ -7,6 +7,5 @@
         public string tipoSancion { get; set;}
         public string tipoPersona { get; set; }
         public string institucionDependencia { get; set; }
-
     }
 }

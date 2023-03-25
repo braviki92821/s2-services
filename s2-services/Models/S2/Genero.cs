@@ -1,4 +1,6 @@
-﻿namespace s2_services.Models.S2
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace s2_services.Models.S2
 {
     public class Genero
     {

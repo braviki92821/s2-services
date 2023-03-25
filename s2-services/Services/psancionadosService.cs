@@ -31,7 +31,7 @@ namespace s2_services.Services
 
         public List<Psancionados> GetPsancionadosbynames(psancionadosFilter psancionadosFilter)
         {
-            string search = "";
+            string search = "{expediente:/"+psancionadosFilter.expediente+"/i,'institucionDependencia.nombre':/" + psancionadosFilter.institucionDependencia + "/i,'particularSancionado.nombreRazonSocial':/" + psancionadosFilter.razonSocial + "/i,'particularSancionado.tipoPersona':/" + psancionadosFilter.tipoPersona + "/i,tipoSancion:{$elemMatch:{valor:/" + psancionadosFilter.tipoSancion + "/i}}}";
             var filter = Builders<Psancionados>.Filter;
             var filterDefinition = filter.Or(search);
             return psancionadosColl.FindAsync(filterDefinition).Result.ToList();
